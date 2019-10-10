@@ -1,0 +1,12 @@
+#include <stdio.h>
+#include <strlib.h>
+#include <errno.h>
+#include <string.h>
+
+#define LINE_SIZE 100
+
+char* strerror(int errnum);
+
+int main(int argc, char *argv[]) {
+  
+}

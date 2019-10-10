@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+#define LINE_SIZE 100
+
+char* strerror(int errnum);
+
+int main(int argc, char *argv[]) {
+  
+  int i;                // counter for for loops
+  int line_counter = 0; // counter for printing lines in printed result
+  FILE* fp;             // file pointer for opening, reading and closing files
+  char buf[LINE_SIZE];  // buffer for reading lines from files
+  
+  // when no file is specified in the command line
+  // (when an user only types my-cat)
+  if (argc == 1) {
+    exit(0);
+  }
+
+  //reading arguments which are specified in command line
+  for (i = 1; i<argc; i++) {
+    
+    // open a file for reading
+    fp = fopen(argv[i], "r");
+
+    // when fopen cannot open a file, print error message and exit with value 1
+    if (fp == NULL) {
+      printf("my-cat: cannot open file: %s\n", strerror(errno));
+      exit(1);
+    }
+
+    // when fopen succeeds to open a file
+    while (fgets(buf, LINE_SIZE, fp)) {
+      line_counter++;                 // increment line counter
+      printf("\t%d\t", line_counter); // print line counter first
+      printf("%s", buf);              // print a single line from the file
+    }
+
+    // there is no new line at the last line of each file
+    // so we need to print a new line when we face the last line of each file
+    // so that we can seperate the last line of prvious file and the first line of the following file
+    printf("\n");
+
+    // then close the file when all lines in the file are read
+    fclose(fp);
+    
+    
+  }
+  // when for loop is over
+  // which means all the files typed in command line are all read
+  exit(0);
+}
